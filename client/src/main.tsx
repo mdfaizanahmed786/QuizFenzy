@@ -40,7 +40,7 @@ const router = createBrowserRouter([
         element: <SignInPage />,
       },
       {
-        path: "/playground/:roomId",
+        path: "/playground/:quizId",
         element: <PlayGroundPage />,
       },
       {

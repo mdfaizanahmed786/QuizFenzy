@@ -16,6 +16,13 @@ app.use(morgan("dev"))
 app.use(cookieParser())
 
 
+
+// creating routes
+
+
+
+
+
 const server=http.createServer(app);
 const io = new Server(server, {
 // we can pass options here
