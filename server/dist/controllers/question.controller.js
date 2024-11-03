@@ -28,6 +28,11 @@ const createQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function*
             data: {
                 questionTitle: question.questionTitle,
                 quizId: question.quizId
+            },
+            select: {
+                id: true,
+                questionTitle: true,
+                quizId: true
             }
         });
         if (newQuestion) {
@@ -36,25 +41,105 @@ const createQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function*
                     text: "Your answer",
                     questionId: newQuestion.id,
                     isCorrect: false
+                },
+                select: {
+                    id: true,
+                    text: true,
+                    questionId: true,
+                    isCorrect: true
                 }
             });
+            res.status(201).json({
+                message: "Question added successfully",
+                data: {
+                    question: newQuestion,
+                    answer: newAnswer
+                }
+            });
+            return;
         }
+        res.status(500).json({ error: "Error while creating question" });
+        return;
     }
     catch (error) {
+        console.log(error, "ERROR while adding question");
+        res.status(500).json({ error: "Internal server error" });
+        return;
     }
 });
 exports.createQuestion = createQuestion;
-const editQuestion = (req, res) => {
+const editQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const questionBody = req.body;
+    const questionTitle = questionBody.questionTitle;
     try {
+        if (!questionTitle) {
+            res.status(400).json({ error: "Question title is required" });
+            return;
+        }
+        const questionId = questionBody.id;
+        yield client_1.default.question.update({
+            where: {
+                id: questionId
+            },
+            data: {
+                questionTitle: questionTitle
+            }
+        });
+        res.status(200).json({
+            message: "Question updated successfully"
+        });
+        return;
     }
     catch (error) {
+        console.log(error, "ERROR while updating question");
+        res.status(500).json({ error: "Internal server error" });
+        return;
     }
-};
+});
 exports.editQuestion = editQuestion;
-const deleteQuestion = (req, res) => {
+const deleteQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const questionBody = req.body;
+    const questionId = questionBody.id;
+    const quizId = questionBody.quizId;
     try {
+        if (!questionId) {
+            res.status(400).json({ error: "Question id is required" });
+            return;
+        }
+        if (!quizId) {
+            res.status(400).json({ error: "Quiz id is required" });
+            return;
+        }
+        const questionsInQuiz = yield client_1.default.quiz.findUnique({
+            where: {
+                id: quizId
+            },
+            select: {
+                questions: true
+            }
+        });
+        if (!questionsInQuiz) {
+            res.status(400).json({ error: "Quiz not found" });
+            return;
+        }
+        if (questionsInQuiz.questions.length <= 1) {
+            res.status(400).json({ error: "Quiz should have at least one question" });
+            return;
+        }
+        yield client_1.default.question.delete({
+            where: {
+                id: questionId
+            }
+        });
+        res.status(200).json({
+            message: "Question deleted successfully"
+        });
+        return;
     }
     catch (error) {
+        console.log(error, "ERROR while deleting question");
+        res.status(500).json({ error: "Internal server error" });
+        return;
     }
-};
+});
 exports.deleteQuestion = deleteQuestion;
