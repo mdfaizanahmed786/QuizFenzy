@@ -6,8 +6,7 @@ const userSchema=z.object({
 })
 
 const quizSchema=z.object({
-    quizTitle:z.string().min(1),    
-    creator:z.string().uuid()
+    quizTitle:z.string().min(1)
 })
 
 const questionSchema=z.object({

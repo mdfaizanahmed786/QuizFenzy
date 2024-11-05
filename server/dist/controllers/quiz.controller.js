@@ -52,6 +52,10 @@ const createQuiz = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             data: {
                 quizTitle: quiz.quizTitle,
                 creatorId: userId
+            },
+            select: {
+                quizTitle: true,
+                id: true
             }
         });
         if (!newQuiz) {
@@ -68,7 +72,7 @@ const createQuiz = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.status(500).json({ error: "Error while creating question", success: false });
             return;
         }
-        const newAnswer = yield client_1.default.answer.create({
+        yield client_1.default.answer.create({
             data: {
                 text: "Your answer",
                 questionId: newQuestion.id,
@@ -78,9 +82,7 @@ const createQuiz = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(201).json({
             message: "Quiz created successfully",
             data: {
-                quiz: newQuiz,
-                question: newQuestion,
-                answer: newAnswer
+                quiz: newQuiz
             },
             success: true
         });
@@ -94,7 +96,11 @@ const createQuiz = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.createQuiz = createQuiz;
 const getQuizById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const quizId = req.params.id;
+    const quizId = req.params.quizId;
+    if (!quizId) {
+        res.status(400).json({ error: "Quiz id is required", success: false });
+        return;
+    }
     try {
         const quiz = yield client_1.default.quiz.findUnique({
             where: {

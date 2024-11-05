@@ -35,7 +35,7 @@ model Quiz {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @default(now())
   creator   User       @relation(fields: [creatorId], references: [clerkId], onDelete: Cascade)
-  creatorId String     @unique
+  creatorId String     
   player    Player[]
   questions Question[]
 }

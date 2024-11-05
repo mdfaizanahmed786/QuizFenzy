@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(ClerkExpressRequireAuth());
 
 
-router.post("/add", createQuestion);
+router.post("/create", createQuestion);
 router.get("/remove", deleteQuestion);
 router.put("/edit", editQuestion);
 

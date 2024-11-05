@@ -22,8 +22,10 @@ export default function IndexPage() {
         clerkId: userObject.user.id,
       })
 
-      
-        
+      if(response.data.success){
+        console.log(response.data, "DATA>>>>")
+      } 
+  
     } catch (error) {
       console.log(error)
     }

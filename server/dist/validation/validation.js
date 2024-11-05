@@ -12,8 +12,7 @@ const userSchema = zod_1.default.object({
 });
 exports.userSchema = userSchema;
 const quizSchema = zod_1.default.object({
-    quizTitle: zod_1.default.string().min(1),
-    creator: zod_1.default.string().uuid()
+    quizTitle: zod_1.default.string().min(1)
 });
 exports.quizSchema = quizSchema;
 const questionSchema = zod_1.default.object({

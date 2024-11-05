@@ -42,6 +42,10 @@ const createQuiz = async (req: Request, res: Response) => {
             data: {
                 quizTitle: quiz.quizTitle,
                 creatorId: userId
+            },
+            select:{
+                quizTitle:true,
+                id:true
             }
         })
 
@@ -64,7 +68,7 @@ const createQuiz = async (req: Request, res: Response) => {
             return;
         }
 
-        const newAnswer = await client.answer.create({
+      await client.answer.create({
             data: {
                 text: "Your answer",
                 questionId: newQuestion.id,
@@ -75,9 +79,7 @@ const createQuiz = async (req: Request, res: Response) => {
         res.status(201).json({
             message: "Quiz created successfully",
             data: {
-                quiz: newQuiz,
-                question: newQuestion,
-                answer: newAnswer
+                quiz: newQuiz
             },
             success:true
         })
@@ -96,7 +98,12 @@ const createQuiz = async (req: Request, res: Response) => {
 
 
 const getQuizById = async (req: Request, res: Response) => {
-    const quizId = req.params.id;
+    const quizId = req.params.quizId;
+    if(!quizId){
+        res.status(400).json({ error: "Quiz id is required", success:false });
+        return
+    }
+
     try {
         const quiz = await client.quiz.findUnique({
             where: {

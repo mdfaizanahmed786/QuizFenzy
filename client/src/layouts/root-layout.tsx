@@ -14,7 +14,7 @@ const RootLayout = () => {
     routerPush={(to) => navigate(to)}
     routerReplace={(to) => navigate(to, { replace: true })}
     publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-      <main>
+      <main className="max-w-5xl mx-auto py-3">
         <header>
             <SignedIn>
                 <UserButton/>

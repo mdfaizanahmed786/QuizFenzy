@@ -16,7 +16,6 @@ import GameOverPage from "./routes/game-over.tsx";
 import ResultsPage from "./routes/results.tsx";
 import CreateQuizPage from "./routes/create-quiz.tsx";
 
-
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
@@ -53,10 +52,10 @@ const router = createBrowserRouter([
       },
       {
         element: <DashboardLayout />,
-        path: 'dashboard',
+        path: "dashboard",
         children: [
-          { path: '/dashboard', element: <DashboardPage /> },
-          { path: '/dashboard/quiz/:quizId', element: <CreateQuizPage /> },
+          { path: "/dashboard", element: <DashboardPage /> },
+          { path: "/dashboard/quiz/:quizId", element: <CreateQuizPage /> },
         ],
       },
     ],
@@ -65,8 +64,6 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-     
     <RouterProvider router={router} />
-
   </StrictMode>
 );
