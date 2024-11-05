@@ -20,7 +20,7 @@ const addAnswer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const parsedAnswerBody = validation_1.answerSchema.safeParse(answerBody);
     try {
         if (!parsedAnswerBody.success) {
-            res.status(400).json({ error: parsedAnswerBody.error });
+            res.status(400).json({ error: parsedAnswerBody.error, success: false });
             return;
         }
         const answer = parsedAnswerBody.data;
@@ -33,13 +33,14 @@ const addAnswer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
         res.status(201).json({
             message: "Answer added successfully",
-            data: newAnswer
+            data: newAnswer,
+            success: true
         });
         return;
     }
     catch (error) {
         console.log(error, "ERROR while adding answer");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success: false });
         return;
     }
 });
@@ -50,12 +51,12 @@ const editAnswer = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const updatedCorrected = answerBody.isCorrect;
     try {
         if (!newText || !updatedCorrected) {
-            res.status(400).json({ error: "Text is required" });
+            res.status(400).json({ error: "Text is required", success: false });
             return;
         }
         const answerId = answerBody.id;
         if (!answerId) {
-            res.status(400).json({ error: "Answer id is required" });
+            res.status(400).json({ error: "Answer id is required", success: false });
             return;
         }
         if (updatedCorrected) {
@@ -81,12 +82,13 @@ const editAnswer = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
         res.status(200).json({
             message: "Answer updated successfully",
+            success: true
         });
         return;
     }
     catch (error) {
         console.log(error, "ERROR while updating answer");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success: false });
         return;
     }
 });
@@ -95,7 +97,7 @@ const deleteAnswer = (req, res) => {
     const answerId = req.body.id;
     try {
         if (!answerId) {
-            res.status(400).json({ error: "Answer id is required" });
+            res.status(400).json({ error: "Answer id is required", success: false });
             return;
         }
         const deletedAnswer = client_1.default.answer.delete({
@@ -105,13 +107,14 @@ const deleteAnswer = (req, res) => {
         });
         res.status(200).json({
             message: "Answer deleted successfully",
-            data: deletedAnswer
+            data: deletedAnswer,
+            success: true
         });
         return;
     }
     catch (error) {
         console.log(error, "ERROR while deleting answer");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success: false });
         return;
     }
 };

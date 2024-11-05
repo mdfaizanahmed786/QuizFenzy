@@ -20,7 +20,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const parseUserBody = validation_1.userSchema.safeParse(userBody);
     try {
         if (!parseUserBody.success) {
-            res.status(400).json({ error: parseUserBody.error });
+            res.status(400).json({ error: parseUserBody.error, success: false });
             return;
         }
         const user = parseUserBody.data;
@@ -30,7 +30,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             }
         });
         if (existingUser) {
-            res.status(400).json({ error: "User already exists" });
+            res.status(400).json({ error: "User already exists", success: false });
             return;
         }
         const newUser = yield client_1.default.user.create({
@@ -41,18 +41,19 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             }
         });
         if (!newUser) {
-            res.status(500).json({ error: "Error while creating user" });
+            res.status(500).json({ error: "Error while creating user", success: false });
             return;
         }
         res.status(201).json({
             message: "User created successfully",
-            data: newUser
+            data: newUser,
+            success: true
         });
         return;
     }
     catch (error) {
         console.log(error, "Error while creating user");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success: false });
         return;
     }
 });

@@ -20,7 +20,7 @@ const createQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const parsedQuestionBody = validation_1.questionSchema.safeParse(questionBody);
     try {
         if (!parsedQuestionBody.success) {
-            res.status(400).json({ error: parsedQuestionBody.error });
+            res.status(400).json({ error: parsedQuestionBody.error, success: false });
             return;
         }
         const question = parsedQuestionBody.data;
@@ -36,7 +36,7 @@ const createQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function*
             }
         });
         if (!newQuestion) {
-            res.status(500).json({ error: "Error while creating question" });
+            res.status(500).json({ error: "Error while creating question", success: false });
             return;
         }
         const newAnswer = yield client_1.default.answer.create({
@@ -56,14 +56,15 @@ const createQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function*
             message: "Question added successfully",
             data: {
                 question: newQuestion,
-                answer: newAnswer
-            }
+                answer: newAnswer,
+            },
+            success: true
         });
         return;
     }
     catch (error) {
         console.log(error, "ERROR while adding question");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success: false });
         return;
     }
 });
@@ -73,7 +74,7 @@ const editQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const questionTitle = questionBody.questionTitle;
     try {
         if (!questionTitle) {
-            res.status(400).json({ error: "Question title is required" });
+            res.status(400).json({ error: "Question title is required", success: false });
             return;
         }
         const questionId = questionBody.id;
@@ -86,13 +87,14 @@ const editQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             }
         });
         res.status(200).json({
-            message: "Question updated successfully"
+            message: "Question updated successfully",
+            success: true
         });
         return;
     }
     catch (error) {
         console.log(error, "ERROR while updating question");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success: false });
         return;
     }
 });
@@ -103,11 +105,11 @@ const deleteQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const quizId = questionBody.quizId;
     try {
         if (!questionId) {
-            res.status(400).json({ error: "Question id is required" });
+            res.status(400).json({ error: "Question id is required", success: false });
             return;
         }
         if (!quizId) {
-            res.status(400).json({ error: "Quiz id is required" });
+            res.status(400).json({ error: "Quiz id is required", success: false });
             return;
         }
         const questionsInQuiz = yield client_1.default.quiz.findUnique({
@@ -119,11 +121,11 @@ const deleteQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function*
             }
         });
         if (!questionsInQuiz) {
-            res.status(400).json({ error: "Quiz not found" });
+            res.status(400).json({ error: "Quiz not found", success: false });
             return;
         }
         if (questionsInQuiz.questions.length <= 1) {
-            res.status(400).json({ error: "Quiz should have at least one question" });
+            res.status(400).json({ error: "Quiz should have at least one question", success: false });
             return;
         }
         yield client_1.default.question.delete({
@@ -132,13 +134,14 @@ const deleteQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function*
             }
         });
         res.status(200).json({
-            message: "Question deleted successfully"
+            message: "Question deleted successfully",
+            success: true
         });
         return;
     }
     catch (error) {
         console.log(error, "ERROR while deleting question");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success: false });
         return;
     }
 });

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getQuizById = exports.createQuiz = exports.getQuizzes = void 0;
+exports.getQuizzes = exports.getQuizById = exports.createQuiz = void 0;
 const client_1 = __importDefault(require("../utils/client"));
 const validation_1 = require("../validation/validation");
 const getQuizzes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,12 +26,13 @@ const getQuizzes = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
         res.status(200).json({
             message: "Quizzes fetched successfully",
-            data: quizzes
+            data: quizzes,
+            success: true
         });
     }
     catch (error) {
         console.log(error, "ERROR while fetching quizzes");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success: false });
         return;
     }
 });
@@ -43,7 +44,7 @@ const createQuiz = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const parsedQuizBody = validation_1.quizSchema.safeParse(quizBody);
     try {
         if (!parsedQuizBody.success) {
-            res.status(400).json({ error: parsedQuizBody.error });
+            res.status(400).json({ error: parsedQuizBody.error, success: false });
             return;
         }
         const quiz = parsedQuizBody.data;
@@ -54,7 +55,7 @@ const createQuiz = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             }
         });
         if (!newQuiz) {
-            res.status(500).json({ error: "Error while creating quiz" });
+            res.status(500).json({ error: "Error while creating quiz", success: false });
             return;
         }
         const newQuestion = yield client_1.default.question.create({
@@ -64,7 +65,7 @@ const createQuiz = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             }
         });
         if (!newQuestion) {
-            res.status(500).json({ error: "Error while creating question" });
+            res.status(500).json({ error: "Error while creating question", success: false });
             return;
         }
         const newAnswer = yield client_1.default.answer.create({
@@ -80,13 +81,14 @@ const createQuiz = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 quiz: newQuiz,
                 question: newQuestion,
                 answer: newAnswer
-            }
+            },
+            success: true
         });
         return;
     }
     catch (error) {
         console.log(error, "ERROR while creating quiz");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success: false });
         return;
     }
 });
@@ -118,12 +120,13 @@ const getQuizById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
         res.status(200).json({
             message: "Quiz fetched successfully",
-            data: quiz
+            data: quiz,
+            success: true
         });
     }
     catch (error) {
         console.log(error, "ERROR while fetching quiz");
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success: false });
         return;
     }
 });
