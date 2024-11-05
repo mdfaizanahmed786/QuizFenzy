@@ -9,4 +9,5 @@ const clerk_sdk_node_1 = require("@clerk/clerk-sdk-node");
 const router = express_1.default.Router();
 router.post("/create", (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), quiz_controller_1.createQuiz);
 router.get("/", (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), quiz_controller_1.getQuizzes);
+router.get("/:quizId", (0, clerk_sdk_node_1.ClerkExpressRequireAuth)(), quiz_controller_1.getQuizById);
 exports.default = router;

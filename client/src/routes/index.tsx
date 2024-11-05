@@ -1,6 +1,37 @@
+import axiosInstance from '@/utils/axios';
+import { useUser } from '@clerk/clerk-react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-// Ths will be landing page....
+
 export default function IndexPage() {
+  const userObject=useUser();
+
+   useEffect(()=>{
+   if(!userObject.isLoaded){
+     return;
+   }
+   async function registerUser(){
+    
+    if(!userObject.user){
+      return;
+    }
+    try {
+      const response=await axiosInstance.post('/api/v1/user/register', {
+        email: userObject.user.emailAddresses[0].emailAddress,
+        name: userObject.user.firstName + ' ' + userObject.user.lastName,
+        clerkId: userObject.user.id,
+      })
+
+      
+        
+    } catch (error) {
+      console.log(error)
+    }
+   }
+
+    registerUser();
+    
+   }, [])
   return (
     <header>
       <h1>This is the index page</h1>

@@ -10,7 +10,7 @@ const addAnswer = async (req: Request, res: Response) => {
     const parsedAnswerBody = answerSchema.safeParse(answerBody);
     try {
         if (!parsedAnswerBody.success) {
-            res.status(400).json({ error: parsedAnswerBody.error });
+            res.status(400).json({ error: parsedAnswerBody.error, success:false });
             return;
         }
 
@@ -25,13 +25,14 @@ const addAnswer = async (req: Request, res: Response) => {
 
         res.status(201).json({
             message: "Answer added successfully",
-            data: newAnswer
+            data: newAnswer,
+            success:true
         })
         return;
 
     } catch (error) {
         console.log(error, "ERROR while adding answer")
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success:false });
         return;
     }
 }
@@ -44,14 +45,14 @@ const editAnswer = async (req: Request, res: Response) => {
     const updatedCorrected = answerBody.isCorrect;
     try {
         if (!newText || !updatedCorrected) {
-            res.status(400).json({ error: "Text is required" });
+            res.status(400).json({ error: "Text is required", success:false });
             return
         }
 
         const answerId = answerBody.id;
 
         if (!answerId) {
-            res.status(400).json({ error: "Answer id is required" });
+            res.status(400).json({ error: "Answer id is required", success:false });
             return
         }
 
@@ -84,13 +85,14 @@ const editAnswer = async (req: Request, res: Response) => {
 
         res.status(200).json({
             message: "Answer updated successfully",
+            success:true
         })
 
         return;
 
     } catch (error) {
         console.log(error, "ERROR while updating answer")
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success:false });
         return
 
     }
@@ -102,7 +104,7 @@ const deleteAnswer = (req: Request, res: Response) => {
     try {
 
         if (!answerId) {
-            res.status(400).json({ error: "Answer id is required" });
+            res.status(400).json({ error: "Answer id is required", success:false });
             return
         }
 
@@ -114,13 +116,14 @@ const deleteAnswer = (req: Request, res: Response) => {
 
         res.status(200).json({
             message: "Answer deleted successfully",
-            data: deletedAnswer
+            data: deletedAnswer,
+            success:true
         })
         return;
 
     } catch (error) {
         console.log(error, "ERROR while deleting answer")
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error", success:false });
         return
     }
 

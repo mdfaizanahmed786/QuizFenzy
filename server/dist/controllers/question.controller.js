@@ -35,30 +35,30 @@ const createQuestion = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 quizId: true
             }
         });
-        if (newQuestion) {
-            const newAnswer = yield client_1.default.answer.create({
-                data: {
-                    text: "Your answer",
-                    questionId: newQuestion.id,
-                    isCorrect: false
-                },
-                select: {
-                    id: true,
-                    text: true,
-                    questionId: true,
-                    isCorrect: true
-                }
-            });
-            res.status(201).json({
-                message: "Question added successfully",
-                data: {
-                    question: newQuestion,
-                    answer: newAnswer
-                }
-            });
+        if (!newQuestion) {
+            res.status(500).json({ error: "Error while creating question" });
             return;
         }
-        res.status(500).json({ error: "Error while creating question" });
+        const newAnswer = yield client_1.default.answer.create({
+            data: {
+                text: "Your answer",
+                questionId: newQuestion.id,
+                isCorrect: false
+            },
+            select: {
+                id: true,
+                text: true,
+                questionId: true,
+                isCorrect: true
+            }
+        });
+        res.status(201).json({
+            message: "Question added successfully",
+            data: {
+                question: newQuestion,
+                answer: newAnswer
+            }
+        });
         return;
     }
     catch (error) {
