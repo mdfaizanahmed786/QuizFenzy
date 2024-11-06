@@ -27,7 +27,7 @@ export function CreateQuestionModal({
 }: CreateQuestionProps) {
 
     const [questionTitle, setQuestionTitle] = useState("");
-    const { getToken } = useAuth();
+    const { getToken, isLoaded } = useAuth();
 
     async function addQuestion() {  
         const token = await getToken();
@@ -58,6 +58,10 @@ export function CreateQuestionModal({
           console.log(error);
         }
       }
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
   return (
     <Dialog open={openQuestionModal} onOpenChange={setOpenQuestionModal}>
       <DialogContent className="sm:max-w-md">
