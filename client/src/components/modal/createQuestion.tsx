@@ -50,7 +50,7 @@ export function CreateQuestionModal({
           );
     
           if (data.success) {
-            console.log(data, "DATA>>>>");
+
             setOpenQuestionModal(false);
             getQuiz();
           }

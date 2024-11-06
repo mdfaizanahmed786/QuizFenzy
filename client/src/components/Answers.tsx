@@ -3,6 +3,7 @@ import { DeleteIcon, Edit2Icon } from 'lucide-react'
 
 
 function Answers({answer, question, getQuiz}:{answer:Answer, question:Question, getQuiz:()=>Promise<void>}) {
+
   return (
     <div key={answer.id} className="border-2 flex items-center justify-between gap-2 border-black p-2">
     <li>{answer.text}</li>
@@ -12,6 +13,7 @@ function Answers({answer, question, getQuiz}:{answer:Answer, question:Question, 
         <DeleteIcon className="cursor-pointer" />
       )}
     </div>
+    
   </div>
   )
 }

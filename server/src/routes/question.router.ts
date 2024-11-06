@@ -9,7 +9,7 @@ router.use(ClerkExpressRequireAuth());
 
 
 router.post("/create", createQuestion);
-router.get("/remove", deleteQuestion);
+router.delete("/remove", deleteQuestion);
 router.put("/edit", editQuestion);
 
 
